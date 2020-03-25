@@ -46,8 +46,34 @@ function subirArchivosCatalogo() {
     })
 }
 
-function mostrarArchivosCatalogo(){
+function mostrarArchivosCatalogo() {
     const catalogoRef = db.collection('catalogo');
+    const query = catalogoRef;
+    query.get()
+        .then(products => {
+            products.forEach(doc => {
+
+            })
+        })
+
 }
+/*
+document.addEventListener("DOMContentLoaded", event => {
+    //const app = firebase.app();
+    const db = firebase.firestore();
+    const catalogoRef = db.collection('catalogo');
+
+    //const query = productsRef.where('price', '>=', 10);
+    const query = catalogoRef;
+    query.get()
+        .then(products => {
+            products.forEach(doc => {
+                data = doc.data()
+                document.write(data.descripcion + '<img src="' + data.imagen + '" width="100vw"></img>')
+            })
+        })
+
+});
+*/
 
 // FIN CATALOGO
