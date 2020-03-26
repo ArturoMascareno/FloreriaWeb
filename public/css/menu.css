@@ -1,0 +1,152 @@
+.menu{
+
+    background-color: #FFD096;
+}
+body{
+	font-family: 'Roboto', sans-serif;
+}
+.boton {
+  	background-color: #DC0303;
+  	border: none;
+  	color: white;
+  	padding: 15px 32px;
+  	text-align: center;
+  	text-decoration: none;
+  	display: inline-block;
+  	font-size: 16px;
+  	width: 33%;
+}
+
+.cargar {
+	background-color: #DC0303;
+	border-radius: 15px;
+	border: none;
+  	color: white;
+  	padding: 32px 32px;
+  	text-align: center;
+  	text-decoration: none;
+  	display: inline-block;
+  	font-size: 16px;
+  	margin: 10px;
+}
+button:hover {
+	cursor: pointer;
+}
+
+h1 {
+	margin-left: 30%;
+	
+	font-style: Snell Roundhand;
+	display: inline-block;
+}
+
+.campo {
+  	border-radius: 5 px;
+  	text-decoration: none;
+  	font-size: 12px;
+  	width: 80%;
+  	height: 30px;
+  	display: block;
+  	margin: 10px;
+  	font-size: 16px;
+}
+
+label {
+	font-size: 20px;
+	margin: 10px;
+	
+	display: block;
+}
+
+.box {
+	padding-left: 10%;
+	padding-top: 5%;
+	align-items: center;
+	padding-bottom: 150px;
+	background-color: #FFD096;
+}
+
+.dropbtn {
+  background-color: #DC0303;
+  	border: none;
+  	color: white;
+  	padding: 15px 32px;
+  	text-align: center;
+  	text-decoration: none;
+  	display: inline-block;
+  	font-size: 16px;
+  	width: 100%;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: transparent;
+  width: 100%;
+}
+
+/* Links inside the dropdown */
+.dropdown-content button {
+  color: white;
+  padding: 15px 32px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/*catalogo prueba*/
+.producto{
+	display: inline-block;
+    grid-template-columns: 300px;
+    grid-template-rows: 200px 100px;
+    grid-template-areas: "producto-imagen" "producto-botones";
+    margin-right: 50px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.9);
+    text-align: center;
+    width: 300px;
+}
+
+.producto-imagen{
+    grid-area: producto-imagen;
+    background-image: "rosa.jpg";
+    background-size: cover;
+    padding-top: 20px;
+    width: 230px;
+    height: 230px;
+}
+
+.producto-botones{
+    grid-area: producto-botones;
+    margin: 10px;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    grid-template-rows: 1fr;
+    background: #DC0303;
+}
+
+.producto-botones .buttons{
+    display: inline-block;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+
+}

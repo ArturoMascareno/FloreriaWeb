@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <title>Inicio de sesión | Florería </title>
+
+    <!--INICIO Conexion Firebase-->
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.12.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.12.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.12.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.12.0/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.12.0/firebase-storage.js"></script>
+    <script defer src="/__/firebase/7.11.0/firebase-firestore.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+    <!--FIN Conexion Firebase-->
+</head>
+<body>
+
+    
+    <div class="login-box">
+
+
+        <img src="logo.png" class="avatar" alt="">
+        <h1>Inicie sesión</h1>
+
+        <form >
+            <label for="username">Usuario</label>
+            <input type="text" placeholder="Escriba usuario">
+
+            <label for="password">Contraseña</label>
+            <input type="text" placeholder="Escriba contraseña">
+
+            
+            <input type="button" onclick="location.href='menuprincipal.html';" value="Ingresar">
+            
+
+
+
+
+        </form>
+    </div>
+    <script src="./app.js"></script>
+</body>
+</html>

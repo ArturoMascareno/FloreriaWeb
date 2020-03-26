@@ -8,17 +8,18 @@ function uuidv4() {
         return v.toString(16);
     });
 }
-// inicio inputs
+// INICIO inputs
 
 // en input de imagen  poner -> onchange="imagenTemporal(this.files)"
 function imagenTemporal(imagenes) {
     imagen = imagenes.item(0);
+    console.log(imagen)
 }
 // en input poner -> onchange="textoTemporal(this.value)"
 function textoTemporal(descripcion) {
     this.descripcion = descripcion;
 }
-// fin inputs
+// FIN inputs
 
 function limpiarVariables() {
     imagen = null;
@@ -42,6 +43,7 @@ function subirArchivosCatalogo() {
                 claveImagen: claveImagen
             })
             limpiarVariables();
+            alert("Datos guardados con éxito");
         })
     })
 }
