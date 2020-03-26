@@ -1,5 +1,9 @@
 var imagen;
 var descripcion;
+var db;
+document.addEventListener("DOMContentLoaded", event => {
+    db = firebase.firestore();
+})
 
 // generador de nombres aleatorios para las imagenes
 function uuidv4() {
@@ -13,12 +17,12 @@ function uuidv4() {
 // en input de imagen  poner -> onchange="imagenTemporal(this.files)"
 function imagenTemporal(imagenes) {
     imagen = imagenes.item(0);
-    console.log(imagen)
 }
-// en input poner -> onchange="textoTemporal(this.value)"
+// en input de texto poner -> onchange="textoTemporal(this.value)"
 function textoTemporal(descripcion) {
     this.descripcion = descripcion;
 }
+
 // FIN inputs
 
 function limpiarVariables() {
@@ -29,35 +33,45 @@ function limpiarVariables() {
 // INICIO CATALOGO
 
 function subirArchivosCatalogo() {
-    const db = firebase.firestore();
+
+    //const db = firebase.firestore();
     const almacenamientoRef = firebase.storage().ref();
     const claveImagen = uuidv4();
     const imagenRef = almacenamientoRef.child(claveImagen);
-    const tareaSubir = imagenRef.put(imagen);
 
-    tareaSubir.then(snapshot => {
-        const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
-            db.collection("catalogo").add({
-                descripcion: descripcion,
-                imagen: downloadURL,
-                claveImagen: claveImagen
+    try {
+        const tareaSubir = imagenRef.put(imagen);
+
+        tareaSubir.then(snapshot => {
+            const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                db.collection("catalogo").add({
+                    descripcion: descripcion,
+                    imagen: downloadURL,
+                    claveImagen: claveImagen
+                })
+                limpiarVariables();
+                alert("Datos guardados con éxito");
             })
-            limpiarVariables();
-            alert("Datos guardados con éxito");
         })
-    })
-}
+    }
+    catch {
+        alert("Error al subir los datos");
+    }
 
+}
+// regresa un array con url de imagen, descripcion y clave de imagen
 function mostrarArchivosCatalogo() {
     const catalogoRef = db.collection('catalogo');
     const query = catalogoRef;
+    var catalogoRegistros = [];
     query.get()
         .then(products => {
             products.forEach(doc => {
-
+                data = doc.data()
+                catalogoRegistros.push({ "imagen": data.imagen, "descripcion": data.descripcion, "claveImagen": data.claveImagen })
             })
         })
-
+    return catalogoRegistros;
 }
 /*
 document.addEventListener("DOMContentLoaded", event => {
@@ -76,6 +90,6 @@ document.addEventListener("DOMContentLoaded", event => {
         })
 
 });
-*/
 
+*/
 // FIN CATALOGO
