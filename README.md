@@ -1,5 +1,5 @@
-# FloreriaWebBackend
-Floreria Eleonor parte web, encargado de backend
+# FloreriaWeb~~Backend~~
+Floreria Eleonor parte web, ~~encargado de backend~~ combinación de frontend y backend
 
 ## Herramientas usadas
 Visual Studio Code
