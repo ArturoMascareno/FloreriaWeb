@@ -3,8 +3,11 @@ Floreria Eleonor parte web, encargado de backend
 
 ## Herramientas usadas
 Visual Studio Code
+
 Google Chrome
+
 Node js
+
 Firebase
 
 ## Como correr la página
