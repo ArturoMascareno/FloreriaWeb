@@ -1,8 +1,10 @@
 var imagen;
 var descripcion;
-var db;
+var db; // referencia a base de datos
+var almacenamientoRef; // referencoa a almacenamiento de imagenes
 document.addEventListener("DOMContentLoaded", event => {
     db = firebase.firestore();
+    almacenamientoRef = firebase.storage().ref();
 })
 
 // generador de nombres aleatorios para las imagenes
@@ -33,15 +35,10 @@ function limpiarVariables() {
 // INICIO CATALOGO
 
 function subirArchivosCatalogo() {
-
-    //const db = firebase.firestore();
-    const almacenamientoRef = firebase.storage().ref();
     const claveImagen = uuidv4();
     const imagenRef = almacenamientoRef.child(claveImagen);
-
     try {
         const tareaSubir = imagenRef.put(imagen);
-
         tareaSubir.then(snapshot => {
             const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
                 db.collection("catalogo").add({
@@ -51,15 +48,16 @@ function subirArchivosCatalogo() {
                 })
                 limpiarVariables();
                 alert("Datos guardados con éxito");
+            }).catch(function (error) {
+                alert("Error al subir los datos")
             })
         })
     }
     catch {
         alert("Error al subir los datos");
     }
-
 }
-// regresa un array con url de imagen, descripcion y clave de imagen
+// regresa un array con url de imagen, descripcion, clave de imagen e id del documento contenedor
 function mostrarArchivosCatalogo() {
     const catalogoRef = db.collection('catalogo');
     const query = catalogoRef;
@@ -68,28 +66,24 @@ function mostrarArchivosCatalogo() {
         .then(products => {
             products.forEach(doc => {
                 data = doc.data()
-                catalogoRegistros.push({ "imagen": data.imagen, "descripcion": data.descripcion, "claveImagen": data.claveImagen })
+                catalogoRegistros.push({ "imagen": data.imagen, "descripcion": data.descripcion, "docId": doc.id })
             })
         })
+
     return catalogoRegistros;
 }
-/*
-document.addEventListener("DOMContentLoaded", event => {
-    //const app = firebase.app();
-    const db = firebase.firestore();
-    const catalogoRef = db.collection('catalogo');
 
-    //const query = productsRef.where('price', '>=', 10);
-    const query = catalogoRef;
-    query.get()
-        .then(products => {
-            products.forEach(doc => {
-                data = doc.data()
-                document.write(data.descripcion + '<img src="' + data.imagen + '" width="100vw"></img>')
-            })
+function borrarArchivosCatalogo(docId) {
+    const docData = db.collection('catalogo').doc(docId);
+    docData.onSnapshot(doc => {
+        const data = doc.data();
+        almacenamientoRef.child(data.claveImagen).delete().then(function () {
+            docData.delete();
+            alert("Borrado con éxito")
+        }).catch(function (error) {
+            alert("Error al borrar archivo")
         })
+    })
+}
 
-});
-
-*/
 // FIN CATALOGO
