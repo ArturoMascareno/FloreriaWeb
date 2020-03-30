@@ -30,7 +30,7 @@
     <div class="tabs" style="height: 55px; background-color: #FFD096; width: 100%;">
 
         <div class="menu">
-            <button class="boton" onclick="openBox('Catalogo')">Catálogo</button>
+            <button class="boton" onclick="openBox('Catalogo'); mostrarArchivosCatalogo()">Catálogo</button>
             <div class="dropdown" style="width: 33%;">
               <button class="dropbtn" style="cursor:default;">Promociones</button>
               <div class="dropdown-content">
@@ -45,13 +45,13 @@
           <h1 style="display: block; margin-left: 37%">Catálogo</h1>
 
           <button class="cargar" onclick="openBox('AgregarCatalogo')" style="margin-left: 40%; display: block;"><img src="add_circle-24px.svg" style="width:40px; height:40px;"></button>
+          
+          <span id="productosCatalogo"></span>
 
           <div class="producto">
             <img src="rosa.jpg" class="producto-imagen">
-              <div class="producto-botones">
-                <div class="buttons"> 
+              <div class="producto-botones buttons">
                   <button onclick="openBox('ModificarCatalogo')"><img src="create-24px.svg" width="30px" height= "30px"></button>
-                </div>
                 <div class="buttons">
                   <button><img src="clear-24px.svg" width="30px" height= "30px"></button>
                 </div>
@@ -160,7 +160,7 @@
           
 
           <button class="cargar"  style="margin-left: 40%;" onclick="subirArchivosCatalogo()"> Guardar </button>
-
+          
 
         </div>
 

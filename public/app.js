@@ -57,7 +57,14 @@ function subirArchivosCatalogo() {
         alert("Error al subir los datos");
     }
 }
-// regresa un array con url de imagen, descripcion, clave de imagen e id del documento contenedor
+const productosCatalogo =document.querySelector('#productosCatalogo');
+
+function setAttributes(el, attrs) {
+    for(var key in attrs) {
+      el.setAttribute(key, attrs[key]);
+    }
+  }
+// regresa un array con url de imagen, descripcion e id del documento contenedor
 function mostrarArchivosCatalogo() {
     const catalogoRef = db.collection('catalogo');
     const query = catalogoRef;
@@ -66,11 +73,58 @@ function mostrarArchivosCatalogo() {
         .then(products => {
             products.forEach(doc => {
                 data = doc.data()
-                catalogoRegistros.push({ "imagen": data.imagen, "descripcion": data.descripcion, "docId": doc.id })
-            })
-        })
+                //catalogoRegistros.push({ "imagen": data.imagen, "descripcion": data.descripcion, "docId": doc.id })
+                
+                let div1 = document.createElement('div');
+                let imgProducto = document.createElement('img');
+                let div2 = document.createElement('div');
+                let div3 = document.createElement('div');
+                let botonModificar = document.createElement('button');
+                let imgModificar = document.createElement('img');
+                let div4 = document.createElement('div');
+                let botonEliminar = document.createElement('button');
+                let imgEliminar = document.createElement('img');
 
-    return catalogoRegistros;
+                div1.setAttribute('class', 'producto');
+                setAttributes(imgProducto, {'class': 'producto-imagen', 'src': data.imagen});
+                div2.setAttribute('class', 'producto-botones');
+                div3.setAttribute('class', 'buttons');
+                botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
+                setAttributes(imgModificar, {'src': 'create-24px.svg', 'width': '30px', 'height': '30px'});
+                div4.setAttribute('class', 'buttons');
+                // agregar el boton eliminar
+                setAttributes(imgEliminar, {'src': 'clear-24px.svg', 'width': '30px', 'height': '30px'});
+
+                div1.appendChild(imgProducto);
+                div1.appendChild(div2);
+                div2.appendChild(div3);
+                div3.appendChild(botonModificar);
+                botonModificar.appendChild(imgModificar);
+                div2.appendChild(div4);
+                div4.appendChild(botonEliminar);
+                botonEliminar.appendChild(imgEliminar);
+
+                productosCatalogo.appendChild(div1);
+
+
+                /*
+                img.setAttribute('src', data.imagen);
+                productosCatalogo.appendChild(img);
+                */
+            })
+            /*
+            catalogoRegistros.map((registro, index) => {
+                console.log(registro)
+            })
+            */
+        })
+        /*
+    console.log(catalogoRegistros)
+    fakeArray.map((registro, index) => {
+        console.log(registro)
+    })
+    */
+    //return catalogoRegistros;
 }
 
 function borrarArchivosCatalogo(docId) {
