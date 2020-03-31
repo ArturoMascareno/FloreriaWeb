@@ -4,6 +4,7 @@ var db; // referencia a base de datos
 var almacenamientoRef; // referencia a almacenamiento de imagenes
 var idDocModificar; //El id del documento actual cuando se presione modificar
 var data; //data para modificar
+var downloadURLAux;
 var productosCatalogo = document.querySelector('#productosCatalogo'); // span de catalogo
 
 document.addEventListener("DOMContentLoaded", event => {
@@ -36,6 +37,7 @@ function limpiarVariables() {
     descripcion = null;
     idDocModificar = null;
     data = null;
+    downloadURLAux = null;
 }
 
 // INICIO CATALOGO
@@ -100,6 +102,7 @@ function mostrarArchivosCatalogo() {
                 setAttributes(imgProducto, { 'class': 'producto-imagen', 'src': data.imagen });
                 div2.setAttribute('class', 'producto-botones');
                 div3.setAttribute('class', 'buttons');
+                botonModificar.setAttribute('doc-id', doc.id);
                 botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
                 setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
                 div4.setAttribute('class', 'buttons');
@@ -109,6 +112,7 @@ function mostrarArchivosCatalogo() {
                 div1.appendChild(imgProducto);
                 div1.appendChild(div2);
                 div2.appendChild(div3);
+                // botonModificar.setAttribute('doc-id', doc.id);
                 div3.appendChild(botonModificar);
                 botonModificar.appendChild(imgModificar);
                 div2.appendChild(div4);
@@ -124,8 +128,14 @@ function mostrarArchivosCatalogo() {
                 })
 
                 botonModificar.addEventListener('click', (e) => {
+                    debugger;
                     e.stopPropagation();
-                    let idDocModificar = botonModificar.getAttribute('doc-id');
+                    let id = botonModificar.getAttribute('doc-id');                   
+                    document.getElementById('btnGuardarImagen').setAttribute('doc-id', id);
+                    //creo que el pedo esta ahí
+                    //Has de cuenta que yo quería guardar el documento en el que estaba desde que le picaban al lapiz
+                    //Cuando le picaban a eso queria hacer idDocModificar esa variable guardará el doc
+                    //Pero creo que el doc-id no es, simon date es toda tuya
                 })
             })
         })
@@ -145,24 +155,56 @@ function borrarArchivosCatalogo(docId) {
 }
 
 function modificarArchivosCatalago(){
+    debugger;
     try{
-        const docData = db.collection('catalogo').doc(idDocModificar);
+        let id = document.getElementById('btnGuardarImagen').getAttribute('doc-id');
+        descripcion = document.getElementById('inptEditarDescripcionImagen').value;
+
+        const docData = db.collection('catalogo').doc(id);
+        //Aqui creo el nuevo url con la imagen nueva?
+
+        const claveImagen = uuidv4();
+        const imagenRef = almacenamientoRef.child(claveImagen);
+        try {
+            const tareaSubir = imagenRef.put(imagen);
+            tareaSubir.then(snapshot => {
+                const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                    db.collection("catalogo").add({
+                        descripcion: descripcion,
+                        imagen: downloadURL,
+                        claveImagen: claveImagen
+                    })
+                    downloadURLAux=downloadURL;                  
+                    alert("Datos guardados con éxito");
+                }).catch(function (error) {
+                    alert("Error al subir los datos")
+                })
+            })
+        }
+        catch {
+            alert("Error al subir los datos");
+        }
+
         const query = docData;
-        query.get().then( function(doc){
+        query.get()
+        .then( function(doc){
              data = doc.data();
+             var catalago = {
+                claveImagen: data.claveImagen, //
+                descripcion: descripcion,
+                imagen: downloadURLAux //AQUI PONES LA NUEVA URL 
+            }
+            docData.set(catalago);
+            limpiarVariables();
+            alert("Se ha actualizado correctamente");
         }
         ).catch(function(error){
             alert(error);
         });
-        var catalago = {
-            claveImagen: data.claveImagen,
-            descripcion: descripcion,
-            imagen: data.imagen
-        }
-        docData.update(catalago);
-        limpiarVariables();
+
     }
     catch{
+        debugger;
         alert("Se ha presentado un error al actualizar los datos");
     }
 }
