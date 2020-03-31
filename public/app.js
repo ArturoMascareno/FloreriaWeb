@@ -1,7 +1,9 @@
 var imagen;
 var descripcion;
 var db; // referencia a base de datos
-var almacenamientoRef; // referencoa a almacenamiento de imagenes
+var almacenamientoRef; // referencia a almacenamiento de imagenes
+var productosCatalogo = document.querySelector('#productosCatalogo'); // span de catalogo
+
 document.addEventListener("DOMContentLoaded", event => {
     db = firebase.firestore();
     almacenamientoRef = firebase.storage().ref();
@@ -57,24 +59,29 @@ function subirArchivosCatalogo() {
         alert("Error al subir los datos");
     }
 }
-const productosCatalogo =document.querySelector('#productosCatalogo');
+
 
 function setAttributes(el, attrs) {
-    for(var key in attrs) {
-      el.setAttribute(key, attrs[key]);
+    for (var key in attrs) {
+        el.setAttribute(key, attrs[key]);
     }
-  }
-// regresa un array con url de imagen, descripcion e id del documento contenedor
+}
+
 function mostrarArchivosCatalogo() {
     const catalogoRef = db.collection('catalogo');
     const query = catalogoRef;
-    var catalogoRegistros = [];
+
+    // para evitar duplicados
+    let spanOriginal = document.createElement('span');
+    spanOriginal.setAttribute('id', 'productosCatalogo');
+    productosCatalogo.replaceWith(spanOriginal);
+    productosCatalogo = spanOriginal
+
     query.get()
         .then(products => {
             products.forEach(doc => {
                 data = doc.data()
-                //catalogoRegistros.push({ "imagen": data.imagen, "descripcion": data.descripcion, "docId": doc.id })
-                
+                // creacion de los elementos
                 let div1 = document.createElement('div');
                 let imgProducto = document.createElement('img');
                 let div2 = document.createElement('div');
@@ -84,17 +91,17 @@ function mostrarArchivosCatalogo() {
                 let div4 = document.createElement('div');
                 let botonEliminar = document.createElement('button');
                 let imgEliminar = document.createElement('img');
-
+                // creacion de los atributos de los elementos
                 div1.setAttribute('class', 'producto');
-                setAttributes(imgProducto, {'class': 'producto-imagen', 'src': data.imagen});
+                setAttributes(imgProducto, { 'class': 'producto-imagen', 'src': data.imagen });
                 div2.setAttribute('class', 'producto-botones');
                 div3.setAttribute('class', 'buttons');
                 botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
-                setAttributes(imgModificar, {'src': 'create-24px.svg', 'width': '30px', 'height': '30px'});
+                setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
                 div4.setAttribute('class', 'buttons');
-                // agregar el boton eliminar
-                setAttributes(imgEliminar, {'src': 'clear-24px.svg', 'width': '30px', 'height': '30px'});
-
+                botonEliminar.setAttribute('doc-id', doc.id);
+                setAttributes(imgEliminar, { 'src': 'clear-24px.svg', 'width': '30px', 'height': '30px' });
+                // anidación de los elementos
                 div1.appendChild(imgProducto);
                 div1.appendChild(div2);
                 div2.appendChild(div3);
@@ -103,28 +110,16 @@ function mostrarArchivosCatalogo() {
                 div2.appendChild(div4);
                 div4.appendChild(botonEliminar);
                 botonEliminar.appendChild(imgEliminar);
-
+                // despliegue de los elementos
                 productosCatalogo.appendChild(div1);
 
-
-                /*
-                img.setAttribute('src', data.imagen);
-                productosCatalogo.appendChild(img);
-                */
+                botonEliminar.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let id = botonEliminar.getAttribute('doc-id');
+                    borrarArchivosCatalogo(id);
+                })
             })
-            /*
-            catalogoRegistros.map((registro, index) => {
-                console.log(registro)
-            })
-            */
         })
-        /*
-    console.log(catalogoRegistros)
-    fakeArray.map((registro, index) => {
-        console.log(registro)
-    })
-    */
-    //return catalogoRegistros;
 }
 
 function borrarArchivosCatalogo(docId) {
