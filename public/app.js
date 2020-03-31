@@ -2,6 +2,8 @@ var imagen;
 var descripcion;
 var db; // referencia a base de datos
 var almacenamientoRef; // referencia a almacenamiento de imagenes
+var idDocModificar; //El id del documento actual cuando se presione modificar
+var data; //data para modificar
 var productosCatalogo = document.querySelector('#productosCatalogo'); // span de catalogo
 
 document.addEventListener("DOMContentLoaded", event => {
@@ -32,6 +34,8 @@ function textoTemporal(descripcion) {
 function limpiarVariables() {
     imagen = null;
     descripcion = null;
+    idDocModificar = null;
+    data = null;
 }
 
 // INICIO CATALOGO
@@ -118,6 +122,11 @@ function mostrarArchivosCatalogo() {
                     let id = botonEliminar.getAttribute('doc-id');
                     borrarArchivosCatalogo(id);
                 })
+
+                botonModificar.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let idDocModificar = botonModificar.getAttribute('doc-id');
+                })
             })
         })
 }
@@ -133,6 +142,29 @@ function borrarArchivosCatalogo(docId) {
             alert("Error al borrar archivo")
         })
     })
+}
+
+function modificarArchivosCatalago(){
+    try{
+        const docData = db.collection('catalogo').doc(idDocModificar);
+        const query = docData;
+        query.get().then( function(doc){
+             data = doc.data();
+        }
+        ).catch(function(error){
+            alert(error);
+        });
+        var catalago = {
+            claveImagen: data.claveImagen,
+            descripcion: descripcion,
+            imagen: data.imagen
+        }
+        docData.update(catalago);
+        limpiarVariables();
+    }
+    catch{
+        alert("Se ha presentado un error al actualizar los datos");
+    }
 }
 
 // FIN CATALOGO
