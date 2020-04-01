@@ -158,6 +158,8 @@ function borrarArchivosCatalogo(docId) {
 function modificarArchivosCatalago() {
     debugger;
     try {
+        
+
         let id = document.getElementById('btnGuardarImagen').getAttribute('doc-id');
         descripcion = document.getElementById('inptEditarDescripcionImagen').value;
 
@@ -190,12 +192,14 @@ function modificarArchivosCatalago() {
         query.get()
             .then(function (doc) {
                 data = doc.data();
-                var catalago = {
-                    claveImagen: data.claveImagen, //
-                    descripcion: descripcion,
-                    imagen: downloadURLAux //AQUI PONES LA NUEVA URL
-                }
-                docData.set(catalago);
+                const imagenRef = almacenamientoRef.child(data.claveImagen);
+                imagenRef.put(imagen);
+                // var catalago = {
+                //     claveImagen: data.claveImagen, //
+                //     descripcion: descripcion,
+                //     imagen: downloadURLAux //AQUI PONES LA NUEVA URL
+                // }
+                // docData.set(catalago);
                 limpiarVariables();
                 alert("Se ha actualizado correctamente");
             }
