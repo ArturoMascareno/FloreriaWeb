@@ -89,6 +89,7 @@ function mostrarArchivosCatalogo() {
                 data = doc.data()
                 // creacion de los elementos
                 let div1 = document.createElement('div');
+                let lblDescripcion = document.createElement('label');
                 let imgProducto = document.createElement('img');
                 let div2 = document.createElement('div');
                 let div3 = document.createElement('div');
@@ -99,6 +100,7 @@ function mostrarArchivosCatalogo() {
                 let imgEliminar = document.createElement('img');
                 // creacion de los atributos de los elementos
                 div1.setAttribute('class', 'producto');
+                lblDescripcion.textContent = data.descripcion;
                 setAttributes(imgProducto, { 'class': 'producto-imagen', 'src': data.imagen });
                 div2.setAttribute('class', 'producto-botones');
                 div3.setAttribute('class', 'buttons');
@@ -109,6 +111,7 @@ function mostrarArchivosCatalogo() {
                 botonEliminar.setAttribute('doc-id', doc.id);
                 setAttributes(imgEliminar, { 'src': 'clear-24px.svg', 'width': '30px', 'height': '30px' });
                 // anidación de los elementos
+                div1.appendChild(lblDescripcion);
                 div1.appendChild(imgProducto);
                 div1.appendChild(div2);
                 div2.appendChild(div3);
@@ -130,30 +133,31 @@ function mostrarArchivosCatalogo() {
                 botonModificar.addEventListener('click', (e) => {
                     debugger;
                     e.stopPropagation();
-                    let id = botonModificar.getAttribute('doc-id');                   
+                    let id = botonModificar.getAttribute('doc-id');
                     document.getElementById('btnGuardarImagen').setAttribute('doc-id', id);
-            
+
                 })
             })
         })
 }
-
 function borrarArchivosCatalogo(docId) {
     const docData = db.collection('catalogo').doc(docId);
     docData.onSnapshot(doc => {
         const data = doc.data();
-        almacenamientoRef.child(data.claveImagen).delete().then(function () {
-            docData.delete();
-            alert("Borrado con éxito")
-        }).catch(function (error) {
-            alert("Error al borrar archivo")
-        })
+        if (doc.exists == true)
+            almacenamientoRef.child(data.claveImagen).delete().then(function () {
+                docData.delete();
+                alert("Borrado con éxito")
+                mostrarArchivosCatalogo();
+            }).catch(function (error) {
+                alert("Error al borrar archivo")
+            })
     })
 }
 
-function modificarArchivosCatalago(){
+function modificarArchivosCatalago() {
     debugger;
-    try{
+    try {
         let id = document.getElementById('btnGuardarImagen').getAttribute('doc-id');
         descripcion = document.getElementById('inptEditarDescripcionImagen').value;
 
@@ -171,7 +175,7 @@ function modificarArchivosCatalago(){
         //                 imagen: downloadURL,
         //                 claveImagen: claveImagen
         //             })
-        //             downloadURLAux=downloadURL;                  
+        //             downloadURLAux=downloadURL;
         //             alert("Datos guardados con éxito");
         //         }).catch(function (error) {
         //             alert("Error al subir los datos")
@@ -184,20 +188,20 @@ function modificarArchivosCatalago(){
 
         const query = docData;
         query.get()
-        .then( function(doc){
-             data = doc.data();
-             var catalago = {
-                claveImagen: data.claveImagen, //
-                descripcion: descripcion,
-                imagen: downloadURLAux //AQUI PONES LA NUEVA URL 
+            .then(function (doc) {
+                data = doc.data();
+                var catalago = {
+                    claveImagen: data.claveImagen, //
+                    descripcion: descripcion,
+                    imagen: downloadURLAux //AQUI PONES LA NUEVA URL
+                }
+                docData.set(catalago);
+                limpiarVariables();
+                alert("Se ha actualizado correctamente");
             }
-            docData.set(catalago);
-            limpiarVariables();
-            alert("Se ha actualizado correctamente");
-        }
-        ).catch(function(error){
-            alert(error);
-        });
+            ).catch(function (error) {
+                alert(error);
+            });
 
     }
     catch{
