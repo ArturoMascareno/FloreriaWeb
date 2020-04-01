@@ -132,10 +132,7 @@ function mostrarArchivosCatalogo() {
                     e.stopPropagation();
                     let id = botonModificar.getAttribute('doc-id');                   
                     document.getElementById('btnGuardarImagen').setAttribute('doc-id', id);
-                    //creo que el pedo esta ahí
-                    //Has de cuenta que yo quería guardar el documento en el que estaba desde que le picaban al lapiz
-                    //Cuando le picaban a eso queria hacer idDocModificar esa variable guardará el doc
-                    //Pero creo que el doc-id no es, simon date es toda tuya
+            
                 })
             })
         })
@@ -163,27 +160,27 @@ function modificarArchivosCatalago(){
         const docData = db.collection('catalogo').doc(id);
         //Aqui creo el nuevo url con la imagen nueva?
 
-        const claveImagen = uuidv4();
-        const imagenRef = almacenamientoRef.child(claveImagen);
-        try {
-            const tareaSubir = imagenRef.put(imagen);
-            tareaSubir.then(snapshot => {
-                const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                    db.collection("catalogo").add({
-                        descripcion: descripcion,
-                        imagen: downloadURL,
-                        claveImagen: claveImagen
-                    })
-                    downloadURLAux=downloadURL;                  
-                    alert("Datos guardados con éxito");
-                }).catch(function (error) {
-                    alert("Error al subir los datos")
-                })
-            })
-        }
-        catch {
-            alert("Error al subir los datos");
-        }
+        // const claveImagen = uuidv4();
+        // const imagenRef = almacenamientoRef.child(claveImagen);
+        // try {
+        //     const tareaSubir = imagenRef.put(imagen);
+        //     tareaSubir.then(snapshot => {
+        //         const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
+        //             db.collection("catalogo").add({
+        //                 descripcion: descripcion,
+        //                 imagen: downloadURL,
+        //                 claveImagen: claveImagen
+        //             })
+        //             downloadURLAux=downloadURL;                  
+        //             alert("Datos guardados con éxito");
+        //         }).catch(function (error) {
+        //             alert("Error al subir los datos")
+        //         })
+        //     })
+        // }
+        // catch {
+        //     alert("Error al subir los datos");
+        // }
 
         const query = docData;
         query.get()
