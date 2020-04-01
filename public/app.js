@@ -156,37 +156,11 @@ function borrarArchivosCatalogo(docId) {
 }
 
 function modificarArchivosCatalago() {
-    debugger;
     try {
-        
 
         let id = document.getElementById('btnGuardarImagen').getAttribute('doc-id');
         descripcion = document.getElementById('inptEditarDescripcionImagen').value;
-
         const docData = db.collection('catalogo').doc(id);
-        //Aqui creo el nuevo url con la imagen nueva?
-
-        // const claveImagen = uuidv4();
-        // const imagenRef = almacenamientoRef.child(claveImagen);
-        // try {
-        //     const tareaSubir = imagenRef.put(imagen);
-        //     tareaSubir.then(snapshot => {
-        //         const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
-        //             db.collection("catalogo").add({
-        //                 descripcion: descripcion,
-        //                 imagen: downloadURL,
-        //                 claveImagen: claveImagen
-        //             })
-        //             downloadURLAux=downloadURL;
-        //             alert("Datos guardados con éxito");
-        //         }).catch(function (error) {
-        //             alert("Error al subir los datos")
-        //         })
-        //     })
-        // }
-        // catch {
-        //     alert("Error al subir los datos");
-        // }
 
         const query = docData;
         query.get()
@@ -194,12 +168,14 @@ function modificarArchivosCatalago() {
                 data = doc.data();
                 const imagenRef = almacenamientoRef.child(data.claveImagen);
                 imagenRef.put(imagen);
-                // var catalago = {
-                //     claveImagen: data.claveImagen, //
-                //     descripcion: descripcion,
-                //     imagen: downloadURLAux //AQUI PONES LA NUEVA URL
-                // }
-                // docData.set(catalago);
+
+                var catalago = {
+                    claveImagen: data.claveImagen, // la clave ya existente
+                    descripcion: descripcion, // la nueva descripción
+                    imagen: data.imagen // la url ya existente
+                }
+
+                docData.set(catalago);
                 limpiarVariables();
                 alert("Se ha actualizado correctamente");
             }
@@ -209,7 +185,6 @@ function modificarArchivosCatalago() {
 
     }
     catch{
-        debugger;
         alert("Se ha presentado un error al actualizar los datos");
     }
 }
