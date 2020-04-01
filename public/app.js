@@ -1,4 +1,4 @@
-var imagen;
+var imagen = null;
 var descripcion;
 var db; // referencia a base de datos
 var almacenamientoRef; // referencia a almacenamiento de imagenes
@@ -108,7 +108,9 @@ function mostrarArchivosCatalogo() {
                 botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
                 setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
                 div4.setAttribute('class', 'buttons');
-                botonEliminar.setAttribute('doc-id', doc.id);
+                //botonEliminar.setAttribute('doc-id', doc.id);
+                //botonEliminar.setAttribute('descripcion', data.descripcion);
+                setAttributes(botonEliminar, { 'doc-id': doc.id, 'descripcion': data.descripcion, 'url': data.imagen })
                 setAttributes(imgEliminar, { 'src': 'clear-24px.svg', 'width': '30px', 'height': '30px' });
                 // anidación de los elementos
                 div1.appendChild(lblDescripcion);
@@ -131,11 +133,12 @@ function mostrarArchivosCatalogo() {
                 })
 
                 botonModificar.addEventListener('click', (e) => {
-                    debugger;
                     e.stopPropagation();
                     let id = botonModificar.getAttribute('doc-id');
                     document.getElementById('btnGuardarImagen').setAttribute('doc-id', id);
-
+                    let descripcion = botonEliminar.getAttribute('descripcion');
+                    let url = botonEliminar.getAttribute('url');
+                    cargarModificarArchivosCatalogo(descripcion, url);
                 })
             })
         })
@@ -155,6 +158,15 @@ function borrarArchivosCatalogo(docId) {
     })
 }
 
+// despliega los registros actuales
+function cargarModificarArchivosCatalogo(descripcion, url) {
+    var inputDescripcion = document.getElementById('inptEditarDescripcionImagen');
+    var imagenEditar = document.getElementById('imagenEditarCatalogo');
+    //descripcion = inputDescripcion.getAttribute('descripcion');
+    inputDescripcion.setAttribute('value', descripcion);
+    imagenEditar.setAttribute('src', url);
+}
+
 function modificarArchivosCatalago() {
     try {
 
@@ -167,17 +179,27 @@ function modificarArchivosCatalago() {
             .then(function (doc) {
                 data = doc.data();
                 const imagenRef = almacenamientoRef.child(data.claveImagen);
-                imagenRef.put(imagen);
-
                 var catalago = {
                     claveImagen: data.claveImagen, // la clave ya existente
                     descripcion: descripcion, // la nueva descripción
                     imagen: data.imagen // la url ya existente
                 }
-
                 docData.set(catalago);
+                if (imagen != null)
+                    imagenRef.put(imagen).then(function () {
+                        mostrarArchivosCatalogo();
+                        alert("Se ha actualizado correctamente");
+                        openBox('Catalogo');
+                    });
+                else {
+                    mostrarArchivosCatalogo();
+                    alert("Se ha actualizado correctamente");
+                    openBox('Catalogo');
+                }
+
                 limpiarVariables();
-                alert("Se ha actualizado correctamente");
+
+
             }
             ).catch(function (error) {
                 alert(error);
@@ -187,6 +209,15 @@ function modificarArchivosCatalago() {
     catch{
         alert("Se ha presentado un error al actualizar los datos");
     }
+}
+
+function openBox(box) {
+    var i;
+    var x = document.getElementsByClassName("box");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(box).style.display = "block";
 }
 
 // FIN CATALOGO

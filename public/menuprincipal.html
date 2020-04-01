@@ -115,19 +115,20 @@
 
           <h1>Agregar Catálogo</h1>
 
-          <label>Foto</label>
-          <div style="display: inline-flex; width: 40%; align-items: center;">
-            <img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-            <!--<button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>-->
-            <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
-          </div>          
+          <!--<label>Foto</label>-->
+          <form>
+            <div style="display: inline-flex; width: 40%; align-items: center;">
+              <!--<img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">-->
+              <!--<button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>-->
+              <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
+            </div>          
+            
+            <label>Descripción</label>
+            <input type="text"  style=" width:80%" class="campo" name="Nombre" placeholder="" onchange="textoTemporal(this.value)">
+  
+            <button class="cargar" type="reset" style="margin-left: 40%;" onclick="subirArchivosCatalogo()"> Guardar </button>
+          </form>
           
-          <label>Descripción</label>
-          <input type="text"  style=" width:80%" class="campo" name="Nombre" placeholder="" onchange="textoTemporal(this.value)">
-
-          
-
-          <button class="cargar"  style="margin-left: 40%;" onclick="subirArchivosCatalogo()"> Guardar </button>
           
 
         </div>
@@ -137,19 +138,20 @@
           <h1>Modificar</h1>
 
           <label>Foto</label>
-          <div style="display: inline-flex; width: 40%; align-items: center;">
-            <img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-            <!-- <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button> -->
-            <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
-          </div>          
+          <form>
+            <div style="display: inline-flex; width: 40%; align-items: center;">
+              <img id="imagenEditarCatalogo" src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
+              <!-- <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button> -->
+              <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
+            </div>          
+            
+            <label>Descripción</label>
+            <input id="inptEditarDescripcionImagen" type="text"  style=" width:80%" class="campo" name="Nombre" placeholder="">
+  
+            <button id="btnGuardarImagen" type="reset" class="cargar"  style="margin-left: 40%;" onclick="modificarArchivosCatalago()"> Guardar </button>
+  
+          </form>
           
-          <label>Descripción</label>
-          <input id="inptEditarDescripcionImagen" type="text"  style=" width:80%" class="campo" name="Nombre" placeholder="">
-
-          
-
-          <button id="btnGuardarImagen" class="cargar"  style="margin-left: 40%;" onclick="modificarArchivosCatalago()"> Guardar </button>
-
 
         </div>
 
