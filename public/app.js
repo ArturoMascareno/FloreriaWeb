@@ -182,18 +182,18 @@ function modificarArchivosCatalago() {
                 var catalago = {
                     claveImagen: data.claveImagen, // la clave ya existente
                     descripcion: descripcion, // la nueva descripción
-                    imagen: data.imagen // la url ya existente
+                    imagen: data.imagen + "1" // la url ya existente
                 }
                 docData.set(catalago);
                 if (imagen != null)
                     imagenRef.put(imagen).then(function () {
-                        mostrarArchivosCatalogo();
                         alert("Se ha actualizado correctamente");
+                        mostrarArchivosCatalogo();
                         openBox('Catalogo');
                     });
                 else {
-                    mostrarArchivosCatalogo();
                     alert("Se ha actualizado correctamente");
+                    mostrarArchivosCatalogo();
                     openBox('Catalogo');
                 }
 
