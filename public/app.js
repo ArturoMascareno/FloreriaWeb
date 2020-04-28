@@ -1,4 +1,4 @@
-var imagen;
+var imagen = null;
 var descripcion;
 var db; // referencia a base de datos
 var almacenamientoRef; // referencia a almacenamiento de imagenes
@@ -40,6 +40,21 @@ function limpiarVariables() {
     downloadURLAux = null;
 }
 
+function openBox(box) {
+    var i;
+    var x = document.getElementsByClassName("box");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(box).style.display = "block";
+}
+
+function setAttributes(el, attrs) {
+    for (var key in attrs) {
+        el.setAttribute(key, attrs[key]);
+    }
+}
+
 // INICIO CATALOGO
 
 function subirArchivosCatalogo() {
@@ -67,11 +82,7 @@ function subirArchivosCatalogo() {
 }
 
 
-function setAttributes(el, attrs) {
-    for (var key in attrs) {
-        el.setAttribute(key, attrs[key]);
-    }
-}
+
 
 function mostrarArchivosCatalogo() {
     const catalogoRef = db.collection('catalogo');
@@ -108,14 +119,13 @@ function mostrarArchivosCatalogo() {
                 botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
                 setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
                 div4.setAttribute('class', 'buttons');
-                botonEliminar.setAttribute('doc-id', doc.id);
+                setAttributes(botonEliminar, { 'doc-id': doc.id, 'descripcion': data.descripcion, 'url': data.imagen })
                 setAttributes(imgEliminar, { 'src': 'clear-24px.svg', 'width': '30px', 'height': '30px' });
                 // anidación de los elementos
                 div1.appendChild(lblDescripcion);
                 div1.appendChild(imgProducto);
                 div1.appendChild(div2);
                 div2.appendChild(div3);
-                // botonModificar.setAttribute('doc-id', doc.id);
                 div3.appendChild(botonModificar);
                 botonModificar.appendChild(imgModificar);
                 div2.appendChild(div4);
@@ -131,11 +141,12 @@ function mostrarArchivosCatalogo() {
                 })
 
                 botonModificar.addEventListener('click', (e) => {
-                    debugger;
                     e.stopPropagation();
                     let id = botonModificar.getAttribute('doc-id');
                     document.getElementById('btnGuardarImagen').setAttribute('doc-id', id);
-
+                    let descripcion = botonEliminar.getAttribute('descripcion');
+                    let url = botonEliminar.getAttribute('url');
+                    cargarModificarArchivosCatalogo(descripcion, url);
                 })
             })
         })
@@ -155,6 +166,14 @@ function borrarArchivosCatalogo(docId) {
     })
 }
 
+// despliega los registros actuales
+function cargarModificarArchivosCatalogo(descripcion, url) {
+    var inputDescripcion = document.getElementById('inptEditarDescripcionImagen');
+    var imagenEditar = document.getElementById('imagenEditarCatalogo');
+    inputDescripcion.setAttribute('value', descripcion);
+    imagenEditar.setAttribute('src', url);
+}
+
 function modificarArchivosCatalago() {
     try {
 
@@ -167,17 +186,27 @@ function modificarArchivosCatalago() {
             .then(function (doc) {
                 data = doc.data();
                 const imagenRef = almacenamientoRef.child(data.claveImagen);
-                imagenRef.put(imagen);
-
                 var catalago = {
                     claveImagen: data.claveImagen, // la clave ya existente
                     descripcion: descripcion, // la nueva descripción
-                    imagen: data.imagen // la url ya existente
+                    imagen: data.imagen + "1" // la url ya existente
+                }
+                docData.set(catalago);
+                if (imagen != null)
+                    imagenRef.put(imagen).then(function () {
+                        alert("Se ha actualizado correctamente");
+                        mostrarArchivosCatalogo();
+                        openBox('Catalogo');
+                    });
+                else {
+                    alert("Se ha actualizado correctamente");
+                    mostrarArchivosCatalogo();
+                    openBox('Catalogo');
                 }
 
-                docData.set(catalago);
                 limpiarVariables();
-                alert("Se ha actualizado correctamente");
+
+
             }
             ).catch(function (error) {
                 alert(error);
@@ -190,3 +219,93 @@ function modificarArchivosCatalago() {
 }
 
 // FIN CATALOGO
+
+// INICIO PROMOCIONES - ARREGLOS
+
+function mostrarArchivosPromocion(tipo) {
+    const promocionRef = db.collection('promocion');
+    const query = promocionRef;
+
+    // para evitar duplicados
+    let spanOriginal = document.createElement('span');
+    if (tipo == 'arreglo') {
+        spanOriginal.setAttribute('id', 'productosPromoArreglo');
+        productosPromoArreglo.replaceWith(spanOriginal);
+        productosPromoArreglo = spanOriginal
+    } else {
+        spanOriginal.setAttribute('id', 'productosPromoEvento');
+        productosPromoEvento.replaceWith(spanOriginal);
+        productosPromoEvento = spanOriginal
+    }
+
+
+    query.get()
+        .then(products => {
+            products.forEach(doc => {
+                data = doc.data()
+                if (data.tipo != tipo) {
+                    
+
+                    // creacion de los elementos
+                    let div1 = document.createElement('div');
+                    //let lblDescripcion = document.createElement('label');
+                    let imgProducto = document.createElement('img');
+                    let div2 = document.createElement('div');
+                    let div3 = document.createElement('div');
+                    let botonModificar = document.createElement('button');
+                    let imgModificar = document.createElement('img');
+                    let div4 = document.createElement('div');
+                    let botonEliminar = document.createElement('button');
+                    let imgEliminar = document.createElement('img');
+                    // creacion de los atributos de los elementos
+                    div1.setAttribute('class', 'producto');
+                    //lblDescripcion.textContent = data.descripcion;
+                    setAttributes(imgProducto, { 'class': 'producto-imagen', 'src': data.imagen });
+                    div2.setAttribute('class', 'producto-botones');
+                    div3.setAttribute('class', 'buttons');
+                    botonModificar.setAttribute('doc-id', doc.id);
+                    botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
+                    setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
+                    div4.setAttribute('class', 'buttons');
+                    setAttributes(botonEliminar, { 'doc-id': doc.id, 'descripcion': data.descripcion, 'url': data.imagen })
+                    setAttributes(imgEliminar, { 'src': 'clear-24px.svg', 'width': '30px', 'height': '30px' });
+                    // anidación de los elementos
+                    //div1.appendChild(lblDescripcion);
+                    div1.appendChild(imgProducto);
+                    div1.appendChild(div2);
+                    div2.appendChild(div3);
+                    div3.appendChild(botonModificar);
+                    botonModificar.appendChild(imgModificar);
+                    div2.appendChild(div4);
+                    div4.appendChild(botonEliminar);
+                    botonEliminar.appendChild(imgEliminar);
+                    // despliegue de los elementos
+                    if (tipo == 'arreglo') {
+                        productosPromoArreglo.appendChild(div1);
+                    } else {
+                        productosPromoEvento.appendChild(div1);
+                    }
+
+
+                    botonEliminar.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        let id = botonEliminar.getAttribute('doc-id');
+                        //borrarArchivosCatalogo(id);
+                    })
+
+                    botonModificar.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        let id = botonModificar.getAttribute('doc-id');
+                        document.getElementById('btnGuardarImagen').setAttribute('doc-id', id);
+                        //let descripcion = botonEliminar.getAttribute('descripcion');
+                        let url = botonEliminar.getAttribute('url');
+                        //cargarModificarArchivosCatalogo(descripcion, url);
+                    })
+                }
+
+            })
+        })
+}
+
+
+//FIN PROMOCIONES - ARREGLOS
