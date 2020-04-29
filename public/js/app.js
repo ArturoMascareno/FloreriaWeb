@@ -118,10 +118,10 @@ function mostrarArchivosCatalogo() {
                 div3.setAttribute('class', 'buttons');
                 botonModificar.setAttribute('doc-id', doc.id);
                 botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
-                setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
+                setAttributes(imgModificar, { 'src': '../recursos/create-24px.svg', 'width': '30px', 'height': '30px' });
                 div4.setAttribute('class', 'buttons');
                 setAttributes(botonEliminar, { 'doc-id': doc.id, 'descripcion': data.descripcion, 'url': data.imagen })
-                setAttributes(imgEliminar, { 'src': 'clear-24px.svg', 'width': '30px', 'height': '30px' });
+                setAttributes(imgEliminar, { 'src': '../recursos/clear-24px.svg', 'width': '30px', 'height': '30px' });
                 // anidación de los elementos
                 div1.appendChild(lblDescripcion);
                 div1.appendChild(imgProducto);
@@ -294,10 +294,10 @@ function mostrarArchivosPromocion(tipo) {
                         botonModificar.setAttribute('onclick', 'openBox(\'ModificarArreglos\')');
                     else
                         botonModificar.setAttribute('onclick', 'openBox(\'ModificarEventos\')');
-                    setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
+                    setAttributes(imgModificar, { 'src': '../recursos/create-24px.svg', 'width': '30px', 'height': '30px' });
                     div4.setAttribute('class', 'buttons');
                     setAttributes(botonEliminar, { 'doc-id': doc.id, 'descripcion': data.descripcion, 'url': data.imagen })
-                    setAttributes(imgEliminar, { 'src': 'clear-24px.svg', 'width': '30px', 'height': '30px' });
+                    setAttributes(imgEliminar, { 'src': '../recursos/clear-24px.svg', 'width': '30px', 'height': '30px' });
                     // anidación de los elementos
                     //div1.appendChild(lblDescripcion);
                     div1.appendChild(imgProducto);
