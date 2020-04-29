@@ -1,234 +1,191 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/menu.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <title>Menu Principal</title>
 
-    <!--INICIO Conexion Firebase-->
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/7.12.0/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/7.12.0/firebase-auth.js"></script>
-    <script defer src="/__/firebase/7.12.0/firebase-database.js"></script>
-    <script defer src="/__/firebase/7.12.0/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/7.12.0/firebase-storage.js"></script>
-    <script defer src="/__/firebase/7.11.0/firebase-firestore.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
-    <!--FIN Conexion Firebase-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/menu.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <title>Menu Principal</title>
+
+  <!--INICIO Conexion Firebase-->
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/7.12.0/firebase-app.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/7.12.0/firebase-auth.js"></script>
+  <script defer src="/__/firebase/7.12.0/firebase-database.js"></script>
+  <script defer src="/__/firebase/7.12.0/firebase-messaging.js"></script>
+  <script defer src="/__/firebase/7.12.0/firebase-storage.js"></script>
+  <script defer src="/__/firebase/7.11.0/firebase-firestore.js"></script>
+  <!-- initialize the SDK after all desired features are loaded -->
+  <script defer src="/__/firebase/init.js"></script>
+  <!--FIN Conexion Firebase-->
 </head>
+
 <body>
 
-    <div class="header" style="height: 100px; background-color: #FFD096; display:flex; align-items: center; width: 100%;">
-        <img src="logo.png" alt="" style="height: 90px; width: 90px;">
-        <h1> Eleonora Florería </h1>
+  <div class="header" style="height: 100px; background-color: #FFD096; display:flex; align-items: center; width: 100%;">
+    <img src="logo.png" alt="" style="height: 90px; width: 90px;">
+    <h1> Eleonora Florería </h1>
+  </div>
+
+  <div class="tabs" style="height: 55px; background-color: #FFD096; width: 100%;">
+
+    <div class="menu">
+      <button class="boton" onclick="openBox('Catalogo'); mostrarArchivosCatalogo()">Catálogo</button>
+      <div class="dropdown" style="width: 33%;">
+        <button class="dropbtn" style="cursor:default;">Promociones</button>
+        <div class="dropdown-content">
+          <button class="boton" onclick="openBox('Eventos'); mostrarArchivosPromocion('evento')">Eventos</button>
+          <button class="boton" onclick="openBox('Arreglos'); mostrarArchivosPromocion('arreglo')">Arreglos</button>
+        </div>
+      </div>
+      <button class="boton" onclick="openBox('Contacto')">Contacto</button>
     </div>
 
-    <div class="tabs" style="height: 55px; background-color: #FFD096; width: 100%;">
-
-        <div class="menu">
-            <button class="boton" onclick="openBox('Catalogo'); mostrarArchivosCatalogo()">Catálogo</button>
-            <div class="dropdown" style="width: 33%;">
-              <button class="dropbtn" style="cursor:default;">Promociones</button>
-              <div class="dropdown-content">
-                <button class="boton" onclick="openBox('Eventos'); mostrarArchivosPromocion('evento')">Eventos</button>
-                <button class="boton" onclick="openBox('Arreglos'); mostrarArchivosPromocion('arreglo')">Arreglos</button>
-              </div>
-            </div>
-            <button class="boton" onclick="openBox('Contacto')">Contacto</button>
-        </div>
-
-        <div id="Catalogo" class="box" style="display: none;">
-          <h1 style="display: block; margin-left: 37%">Catálogo</h1>
-
-          <button class="cargar" onclick="openBox('AgregarCatalogo')" style="margin-left: 40%; display: block;"><img src="add_circle-24px.svg" style="width:40px; height:40px;"></button>
-          
-          <span id="productosCatalogo"></span>
-
-          
-                
-        </div>
-
-
-
-        <div id="AgregarEventos" class="box" style="display: none;">
-
-          <h1 style="display: block; margin-left: 37%">Agregar Eventos</h1>
-          <!--<label>Foto</label>-->
-          <form>
-            <div style="display: inline-flex; width: 40%; align-items: center;">
-              <!--<img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">-->
-              <!--<button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>-->
-              <input class="cargar" type="file" onchange="imagenTemporal(this.files)">
-              
-            </div>  
-            <button class="cargar" type="reset" style="margin-left: 40%;" onclick="subirArchivosPromocion('evento')"> Guardar </button>
-          </form>
-        </div>
-
-        <div id="ModificarEventos" class="box" style="display: none;">
-          <!--
-          <h1 style="display: block; margin-left: 37%">Modificar Eventos</h1>
-          <label>Foto</label>
-          <div style="display: inline-flex; width: 40%; align-items: center;">
-            <img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-            <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>
-            <button class="cargar"  style="margin-left: 30%;" onclick="confirmar()"> Guardar </button>
-          </div>          
-        -->
-        <label>Foto</label>
-          <form>
-            <div style="display: inline-flex; width: 40%; align-items: center;">
-              <img id="imagenEditarEvento" src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-              <!-- <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button> -->
-              <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
-            </div>          
-            <button id="btnGuardarImagenEvento" type="reset" class="cargar"  style="margin-left: 40%;" onclick="modificarArchivosPromocion()"> Guardar </button>
-          </form>
-
-        </div>
-
-
-        <div id="ModificarArreglos" class="box" style="display: none;">
-
-          <!--
-          <h1 style="display: block; margin-left: 37%">Modificar Arreglos</h1>
-          <label>Foto</label>
-          <div style="display: inline-flex; width: 40%; align-items: center;">
-            <img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-            <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>
-            <button class="cargar"  style="margin-left: 30%;" onclick="confirmar()"> Guardar </button>
-          </div>   
-        -->
-          <label>Foto</label>
-          <form>
-            <div style="display: inline-flex; width: 40%; align-items: center;">
-              <img id="imagenEditarArreglo" src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-              <!-- <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button> -->
-              <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
-            </div>          
-            <button id="btnGuardarImagenArreglo" type="reset" class="cargar"  style="margin-left: 40%;" onclick="modificarArchivosPromocion()"> Guardar </button>
-          </form>
-        </div>
-
-
-        <div  id="AgregarArreglos" class="box" style="display: none;">
-          <h1 style="display: block; margin-left: 37%">Agregar Arreglos</h1>
-          <!--<label>Foto</label>-->
-          <div style="display: inline-flex; width: 40%; align-items: center;">
-            <!--<img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">-->
-            <!--<button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>-->
-            <input class="cargar" type="file" onchange="imagenTemporal(this.files)">
-          </div>  
-          <button class="cargar" type="reset" style="margin-left: 40%;" onclick="subirArchivosPromocion('arreglo')"> Guardar </button>
-        </div>
-
-        <div id="AgregarCatalogo"  class="box"  style="display: none;">
-
-          <h1>Agregar Catálogo</h1>
-
-          <!--<label>Foto</label>-->
-          <form>
-            <div style="display: inline-flex; width: 40%; align-items: center;">
-              <!--<img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">-->
-              <!--<button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>-->
-              <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
-            </div>          
-            
-            <label>Descripción</label>
-            <input type="text"  style=" width:80%" class="campo" name="Nombre" placeholder="" onchange="textoTemporal(this.value)">
-  
-            <button class="cargar" type="reset" style="margin-left: 40%;" onclick="subirArchivosCatalogo()"> Guardar </button>
-          </form>
-
-        </div>
-
-        <div id="ModificarCatalogo"  class="box"  style="display: none;">
-
-          <h1>Modificar</h1>
-
-          <label>Foto</label>
-          <form>
-            <div style="display: inline-flex; width: 40%; align-items: center;">
-              <img id="imagenEditarCatalogo" src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-              <!-- <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button> -->
-              <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
-            </div>          
-            
-            <label>Descripción</label>
-            <input id="inptEditarDescripcionImagen" type="text"  style=" width:80%" class="campo" name="Nombre" placeholder="">
-  
-            <button id="btnGuardarImagen" type="reset" class="cargar"  style="margin-left: 40%;" onclick="modificarArchivosCatalago()"> Guardar </button>
-  
-          </form>
-          
-
-        </div>
-
-        
-
-        <div id="Eventos" class = "box" style="display:none">
-           <h1 style="display: block; margin-left: 37%">Eventos</h1>
-
-          <button class="cargar" onclick ="openBox('AgregarEventos')" style="margin-left: 40%; display: block;"><img src="add_circle-24px.svg" style="width:40px; height:40px;"></button>
-
-          <span id="productosPromoEvento"></span>
-
-        </div>
-
-        <div id="Arreglos" class = "box" style="display:none">
-          <h1 style="display: block; margin-left: 37%">Arreglos</h1>
-
-          <button class="cargar" onclick ="openBox('AgregarArreglos')"  style="margin-left: 40%; display: block;"><img src="add_circle-24px.svg" style="width:40px; height:40px;"></button>
-
-          <span id="productosPromoArreglo"></span>
-          
-        </div>
-        
-        <div id="Contacto"   class="box" style="display:none">
-          <h1>Contacto</h1>
-
-          <label>Foto</label>
-          <div style="display: inline-flex; width: 40%; align-items: center;">
-            <img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-            <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>
-          </div>          
-          
-          <label>Nombre</label>
-          <input type="text" class="campo" name="Nombre" placeholder="">
-
-          <label>Teléfono</label>
-          <input type="text" class="campo" name="Tel" placeholder="">
-
-          <label>Dirección</label>
-          <input type="text" class="campo" name="Dir" placeholder="">
-
-          <button class="cargar"  style="margin-left: 40%;" onclick="confirmar()"> Guardar </button>
-          
-        </div>
-
-
-
-          <script>
-            function openBox(box) {
-              var i;
-              var x = document.getElementsByClassName("box");
-              for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";  
-              }
-              document.getElementById(box).style.display = "block";  
-            }
-          </script>
-
-          <script>
-          function confirmar() {
-            alert("Datos guardados con éxito")
-          }
-          </script>
+    <!--################# CATALOGO ###################-->
+    <div id="Catalogo" class="box" style="display: none;">
+      <h1 style="display: block; margin-left: 37%">Catálogo</h1>
+      <button class="cargar" onclick="openBox('AgregarCatalogo')" style="margin-left: 40%; display: block;"><img
+          src="add_circle-24px.svg" style="width:40px; height:40px;"></button>
+      <span id="productosCatalogo"></span>
     </div>
-    <script src="./app.js"></script>
+
+    <div id="AgregarCatalogo" class="box" style="display: none;">
+      <h1>Agregar Catálogo</h1>
+      <form>
+        <div style="display: inline-flex; width: 40%; align-items: center;">
+          <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
+        </div>
+        <label>Descripción</label>
+        <input type="text" style=" width:80%" class="campo" name="Nombre" placeholder=""
+          onchange="textoTemporal(this.value)">
+        <button class="cargar" type="reset" style="margin-left: 40%;" onclick="subirArchivosCatalogo()"> Guardar
+        </button>
+      </form>
+    </div>
+
+    <div id="ModificarCatalogo" class="box" style="display: none;">
+      <h1>Modificar</h1>
+      <label>Foto</label>
+      <form>
+        <div style="display: inline-flex; width: 40%; align-items: center;">
+          <img id="imagenEditarCatalogo" src="placeholder.jpg"
+            style="width: 300px; height: 300px; border: 1px solid black;">
+          <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
+        </div>
+        <label>Descripción</label>
+        <input id="inptEditarDescripcionImagen" type="text" style=" width:80%" class="campo" name="Nombre"
+          placeholder="">
+        <button id="btnGuardarImagen" type="reset" class="cargar" style="margin-left: 40%;"
+          onclick="modificarArchivosCatalago()"> Guardar </button>
+      </form>
+    </div>
+
+    <!--################### EVENTOS ######################-->
+    <div id="Eventos" class="box" style="display:none">
+      <h1 style="display: block; margin-left: 37%">Eventos</h1>
+      <button class="cargar" onclick="openBox('AgregarEventos')" style="margin-left: 40%; display: block;"><img
+          src="add_circle-24px.svg" style="width:40px; height:40px;"></button>
+      <span id="productosPromoEvento"></span>
+    </div>
+
+    <div id="AgregarEventos" class="box" style="display: none;">
+      <h1 style="display: block; margin-left: 37%">Agregar Eventos</h1>
+      <form>
+        <div style="display: inline-flex; width: 40%; align-items: center;">
+          <input class="cargar" type="file" onchange="imagenTemporal(this.files)">
+        </div>
+        <button class="cargar" type="reset" style="margin-left: 40%;" onclick="subirArchivosPromocion('evento')">
+          Guardar </button>
+      </form>
+    </div>
+
+    <div id="ModificarEventos" class="box" style="display: none;">
+      <label>Foto</label>
+      <form>
+        <div style="display: inline-flex; width: 40%; align-items: center;">
+          <img id="imagenEditarEvento" src="placeholder.jpg"
+            style="width: 300px; height: 300px; border: 1px solid black;">
+          <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
+        </div>
+        <button id="btnGuardarImagenEvento" type="reset" class="cargar" style="margin-left: 40%;"
+          onclick="modificarArchivosPromocion()"> Guardar </button>
+      </form>
+    </div>
+
+    <!--##################### ARREGLOS #########################-->
+    <div id="Arreglos" class="box" style="display:none">
+      <h1 style="display: block; margin-left: 37%">Arreglos</h1>
+      <button class="cargar" onclick="openBox('AgregarArreglos')" style="margin-left: 40%; display: block;"><img
+          src="add_circle-24px.svg" style="width:40px; height:40px;"></button>
+      <span id="productosPromoArreglo"></span>
+    </div>
+
+    <div id="AgregarArreglos" class="box" style="display: none;">
+      <h1 style="display: block; margin-left: 37%">Agregar Arreglos</h1>
+      <div style="display: inline-flex; width: 40%; align-items: center;">
+        <input class="cargar" type="file" onchange="imagenTemporal(this.files)">
+      </div>
+      <button class="cargar" type="reset" style="margin-left: 40%;" onclick="subirArchivosPromocion('arreglo')"> Guardar
+      </button>
+    </div>
+
+    <div id="ModificarArreglos" class="box" style="display: none;">
+      <label>Foto</label>
+      <form>
+        <div style="display: inline-flex; width: 40%; align-items: center;">
+          <img id="imagenEditarArreglo" src="placeholder.jpg"
+            style="width: 300px; height: 300px; border: 1px solid black;">
+          <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
+        </div>
+        <button id="btnGuardarImagenArreglo" type="reset" class="cargar" style="margin-left: 40%;"
+          onclick="modificarArchivosPromocion()"> Guardar </button>
+      </form>
+    </div>
+
+    <!--#################### CONTACTO ###################-->
+    <div id="Contacto" class="box" style="display:none">
+      <h1>Contacto</h1>
+
+      <label>Foto</label>
+      <div style="display: inline-flex; width: 40%; align-items: center;">
+        <img src="placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
+        <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>
+      </div>
+
+      <label>Nombre</label>
+      <input type="text" class="campo" name="Nombre" placeholder="">
+
+      <label>Teléfono</label>
+      <input type="text" class="campo" name="Tel" placeholder="">
+
+      <label>Dirección</label>
+      <input type="text" class="campo" name="Dir" placeholder="">
+
+      <button class="cargar" style="margin-left: 40%;" onclick="confirmar()"> Guardar </button>
+
+    </div>
+
+    <!--############## SCRIPTS #############-->
+    <script>
+      function openBox(box) {
+        var i;
+        var x = document.getElementsByClassName("box");
+        for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+        }
+        document.getElementById(box).style.display = "block";
+      }
+    </script>
+
+    <script>
+      function confirmar() {
+        alert("Datos guardados con éxito")
+      }
+    </script>
+  </div>
+  <script src="./app.js"></script>
 </body>
+
 </html>
