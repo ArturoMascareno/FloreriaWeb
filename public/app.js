@@ -4,6 +4,7 @@ var db; // referencia a base de datos
 var almacenamientoRef; // referencia a almacenamiento de imagenes
 var idDocModificar; //El id del documento actual cuando se presione modificar
 var data; //data para modificar
+var tipoPromo;
 var downloadURLAux;
 var productosCatalogo = document.querySelector('#productosCatalogo'); // span de catalogo
 
@@ -222,9 +223,34 @@ function modificarArchivosCatalago() {
 
 // INICIO PROMOCIONES - ARREGLOS
 
+function subirArchivosPromocion(tipo) {
+    const claveImagen = uuidv4();
+    const imagenRef = almacenamientoRef.child(claveImagen);
+    try {
+        const tareaSubir = imagenRef.put(imagen);
+        tareaSubir.then(snapshot => {
+            const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                db.collection("promocion").add({
+                    tipo: tipo,
+                    imagen: downloadURL,
+                    claveImagen: claveImagen
+                })
+                limpiarVariables();
+                alert("Datos guardados con éxito");
+            }).catch(function (error) {
+                alert("Error al subir los datos")
+            })
+        })
+    }
+    catch {
+        alert("Error al subir los datos");
+    }
+}
+
 function mostrarArchivosPromocion(tipo) {
     const promocionRef = db.collection('promocion');
     const query = promocionRef;
+    tipoPromo = tipo;
 
     // para evitar duplicados
     let spanOriginal = document.createElement('span');
@@ -243,8 +269,8 @@ function mostrarArchivosPromocion(tipo) {
         .then(products => {
             products.forEach(doc => {
                 data = doc.data()
-                if (data.tipo != tipo) {
-                    
+                if (data.tipo == tipo) {
+
 
                     // creacion de los elementos
                     let div1 = document.createElement('div');
@@ -264,7 +290,10 @@ function mostrarArchivosPromocion(tipo) {
                     div2.setAttribute('class', 'producto-botones');
                     div3.setAttribute('class', 'buttons');
                     botonModificar.setAttribute('doc-id', doc.id);
-                    botonModificar.setAttribute('onclick', 'openBox(\'ModificarCatalogo\')');
+                    if (tipo == 'arreglo')
+                        botonModificar.setAttribute('onclick', 'openBox(\'ModificarArreglos\')');
+                    else
+                        botonModificar.setAttribute('onclick', 'openBox(\'ModificarEventos\')');
                     setAttributes(imgModificar, { 'src': 'create-24px.svg', 'width': '30px', 'height': '30px' });
                     div4.setAttribute('class', 'buttons');
                     setAttributes(botonEliminar, { 'doc-id': doc.id, 'descripcion': data.descripcion, 'url': data.imagen })
@@ -290,16 +319,19 @@ function mostrarArchivosPromocion(tipo) {
                     botonEliminar.addEventListener('click', (e) => {
                         e.stopPropagation();
                         let id = botonEliminar.getAttribute('doc-id');
-                        //borrarArchivosCatalogo(id);
+                        borrarArchivosPromocion(id);
                     })
 
                     botonModificar.addEventListener('click', (e) => {
                         e.stopPropagation();
                         let id = botonModificar.getAttribute('doc-id');
-                        document.getElementById('btnGuardarImagen').setAttribute('doc-id', id);
+                        if (tipo == 'arreglo')
+                            document.getElementById('btnGuardarImagenArreglo').setAttribute('doc-id', id);
+                        else
+                            document.getElementById('btnGuardarImagenEvento').setAttribute('doc-id', id);
                         //let descripcion = botonEliminar.getAttribute('descripcion');
                         let url = botonEliminar.getAttribute('url');
-                        //cargarModificarArchivosCatalogo(descripcion, url);
+                        cargarModificarArchivosPromocion(url);
                     })
                 }
 
@@ -307,5 +339,81 @@ function mostrarArchivosPromocion(tipo) {
         })
 }
 
+function borrarArchivosPromocion(docId) {
+    const docData = db.collection('promocion').doc(docId);
+    docData.onSnapshot(doc => {
+        const data = doc.data();
+        if (doc.exists == true)
+            almacenamientoRef.child(data.claveImagen).delete().then(function () {
+                docData.delete();
+                alert("Borrado con éxito")
+                mostrarArchivosPromocion(tipoPromo);
+            }).catch(function (error) {
+                alert("Error al borrar archivo")
+            })
+    })
+}
+// despliega los registros actuales
+function cargarModificarArchivosPromocion(url) {
+    //var inputDescripcion = document.getElementById('inptEditarDescripcionImagen');
+    if (tipoPromo == 'arreglo')
+        var imagenEditar = document.getElementById('imagenEditarArreglo');
+    else
+        var imagenEditar = document.getElementById('imagenEditarEvento');
+    //inputDescripcion.setAttribute('value', descripcion);
+    imagenEditar.setAttribute('src', url);
+}
 
+function modificarArchivosPromocion() {
+    try {
+        let id;
+        if (tipoPromo == 'arreglo')
+           id = document.getElementById('btnGuardarImagenArreglo').getAttribute('doc-id');
+        else
+          id = document.getElementById('btnGuardarImagenEvento').getAttribute('doc-id');
+        //descripcion = document.getElementById('inptEditarDescripcionImagen').value;
+        const docData = db.collection('promocion').doc(id);
+
+        const query = docData;
+        query.get()
+            .then(function (doc) {
+                data = doc.data();
+                const imagenRef = almacenamientoRef.child(data.claveImagen);
+                var promocion = {
+                    claveImagen: data.claveImagen, // la clave ya existente
+                    tipo: tipoPromo, // la nueva descripción
+                    imagen: data.imagen + "1" // la url ya existente
+                }
+                docData.set(promocion);
+                if (imagen != null)
+                    imagenRef.put(imagen).then(function () {
+                        alert("Se ha actualizado correctamente");
+                        mostrarArchivosPromocion(tipoPromo);
+                        if (tipoPromo == 'arreglo')
+                            openBox('Arreglos');
+                        else
+                            openBox('Eventos');
+                    });
+                else {
+                    alert("Se ha actualizado correctamente");
+                    mostrarArchivosPromocion(tipoPromo);
+                    if (tipoPromo == 'arreglo')
+                        openBox('Arreglos');
+                    else
+                        openBox('Eventos');
+                }
+
+                limpiarVariables();
+
+
+            }
+            ).catch(function (error) {
+                alert(error);
+            });
+
+    }
+    catch{
+        alert("Se ha presentado un error al actualizar los datos");
+    }
+}
 //FIN PROMOCIONES - ARREGLOS
