@@ -40,7 +40,7 @@
           <button class="boton" onclick="openBox('Arreglos'); mostrarArchivosPromocion('arreglo')">Arreglos</button>
         </div>
       </div>
-      <button class="boton" onclick="openBox('Contacto')">Contacto</button>
+      <button class="boton" onclick="openBox('Contacto'); cargarContacto()">Contacto</button>
     </div>
 
     <!--################# CATALOGO ###################-->
@@ -148,20 +148,21 @@
 
       <label>Foto</label>
       <div style="display: inline-flex; width: 40%; align-items: center;">
-        <img src="./recursos/placeholder.jpg" style="width: 300px; height: 300px; border: 1px solid black;">
-        <button class="cargar" style="margin-left: 90%;">Cargar Archivo</button>
+        <img id="imagenEditarContacto" src="./recursos/placeholder.jpg"
+          style="width: 300px; height: 300px; border: 1px solid black;">
+        <input class="cargar" style="margin-left: 90%;" type="file" onchange="imagenTemporal(this.files)">
       </div>
 
       <label>Nombre</label>
-      <input type="text" class="campo" name="Nombre">
+      <input id="textoNombre" type="text" class="campo" name="Nombre">
 
       <label>Teléfono</label>
-      <input type="text" class="campo" name="Tel">
+      <input id="textoTelefono" type="text" class="campo" name="Tel">
 
       <label>Dirección</label>
-      <input type="text" class="campo" name="Dir">
+      <input id="textoDireccion" type="text" class="campo" name="Dir">
 
-      <button class="cargar" style="margin-left: 40%;" onclick="confirmar()"> Guardar </button>
+      <button class="cargar" style="margin-left: 40%;" onclick="modificarContacto()"> Guardar </button>
 
     </div>
 
@@ -183,7 +184,8 @@
       }
     </script>
   </div>
-  <script src="./app.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/catalogo.js"></script>
 </body>
 
 </html>
