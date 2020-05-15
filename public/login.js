@@ -1,4 +1,5 @@
 
+
 document.addEventListener("DOMContentLoaded", event => {
     db = firebase.firestore();
     almacenamientoRef = firebase.storage().ref();
@@ -12,10 +13,12 @@ function logear(){
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
 
+    var hash = CryptoJS.MD5(password);
+
     query.get()
     .then(function(doc){
         data = doc.data()
-        if(data.nombre == username && data.contrasena == password){
+        if(data.nombre == username && data.contrasena == hash){
             alert('Ingreso corrrectamente')
             window.location.replace('menuprincipal.html');
         }
@@ -25,5 +28,5 @@ function logear(){
     }).catch(function(error){
         console.log(error)
     });
-   
+
 }
