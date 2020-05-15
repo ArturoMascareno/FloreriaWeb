@@ -1,10 +1,12 @@
+var db;
+var almacenamientoRef;
 
 document.addEventListener("DOMContentLoaded", event => {
     db = firebase.firestore();
     almacenamientoRef = firebase.storage().ref();
 })
 
-function logear(){
+(function logear(){
 
     const catalogoRef = db.collection('usuario').doc('usuarioUnico');
     const query = catalogoRef;
@@ -26,4 +28,4 @@ function logear(){
         console.log(error)
     });
    
-}
+}());
