@@ -1,0 +1,32 @@
+var db; // referencia a base de datos
+var almacenamientoRef; // referencia a almacenamiento de imagenes
+
+document.addEventListener("DOMContentLoaded", event => {
+    db = firebase.firestore();
+    almacenamientoRef = firebase.storage().ref();
+})
+
+// generador de nombres aleatorios para las imagenes
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+// para abrir los contenedores
+function openBox(box) {
+    var i;
+    var x = document.getElementsByClassName("box");
+    for (i = 0; i < x.length; i++) {
+        x[i].style.display = "none";
+    }
+    document.getElementById(box).style.display = "block";
+}
+
+// para agregar varios atributos
+function setAttributes(el, attrs) {
+    for (var key in attrs) {
+        el.setAttribute(key, attrs[key]);
+    }
+}

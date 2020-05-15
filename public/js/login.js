@@ -20,7 +20,7 @@ function logear(){
         data = doc.data()
         if(data.nombre == username && data.contrasena == hash){
             alert('Ingreso corrrectamente')
-            window.location.replace('menuprincipal.html');
+            window.location.replace('../menuprincipal.html');
         }
         else{
             alert('Usuario o contraseña incorrectos')
