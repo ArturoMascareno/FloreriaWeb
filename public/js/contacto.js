@@ -17,25 +17,26 @@ function cargarContacto() {
 function modificarContacto() {
     const imagenRef = almacenamientoRef.child("fotoContacto.jpg");
     const imagen = document.getElementById('imagenModificarContacto').files[0];
-    try {
-        var contactoNuevo = {
-            nombre: document.getElementById('textoNombre').value,
-            telefono: document.getElementById('textoTelefono').value,
-            direccion: document.getElementById('textoDireccion').value,
-            foto: document.getElementById('imagenEditarContacto').getAttribute('src') + "1"
-        }
-        db.collection('contacto').doc('contactoUnico').set(contactoNuevo);
-        if (imagen != null)
-            imagenRef.put(imagen).then(function () {
+    if (validarImagen(imagen))
+        try {
+            var contactoNuevo = {
+                nombre: document.getElementById('textoNombre').value,
+                telefono: document.getElementById('textoTelefono').value,
+                direccion: document.getElementById('textoDireccion').value,
+                foto: document.getElementById('imagenEditarContacto').getAttribute('src') + "1"
+            }
+            db.collection('contacto').doc('contactoUnico').set(contactoNuevo);
+            if (imagen != null)
+                imagenRef.put(imagen).then(function () {
+                    alert("Se ha actualizado correctamente");
+                    cargarContacto();
+                });
+            else {
                 alert("Se ha actualizado correctamente");
                 cargarContacto();
-            });
-        else {
-            alert("Se ha actualizado correctamente");
-            cargarContacto();
+            }
         }
-    }
-    catch{
-        alert("Se ha presentado un error al actualizar los datos");
-    }
+        catch{
+            alert("Se ha presentado un error al actualizar los datos");
+        }
 }

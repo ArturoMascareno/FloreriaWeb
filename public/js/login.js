@@ -1,4 +1,4 @@
-
+-
 document.addEventListener("DOMContentLoaded", event => {
     db = firebase.firestore();
     almacenamientoRef = firebase.storage().ref();
@@ -19,7 +19,7 @@ function logear(){
         .then(function(doc){
             var data = doc.data()
             if(data.nombre == username && data.contrasena == hash){
-                alert('Ingreso corrrectamente')
+                alert('Ingresó correctamente ' + data.nombre)
                 window.location.replace('../menuprincipal.html');
             }
             else{
@@ -30,4 +30,3 @@ function logear(){
         });
     }())
 }
-

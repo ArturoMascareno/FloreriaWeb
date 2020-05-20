@@ -4,32 +4,30 @@ function subirArchivosPromocion(tipo) {
     const claveImagen = uuidv4();
     const imagenRef = almacenamientoRef.child(claveImagen);
     var imagen;
-    if (tipo == 'arreglo'){
+    if (tipo == 'arreglo') {
         imagen = document.getElementById('imagenAgregarArreglo').files[0];
-        console.log("entre")}
+    }
     else
         imagen = document.getElementById('imagenAgregarEvento').files[0];
-    console.log(imagen)
-    try {
-        const tareaSubir = imagenRef.put(imagen);
-        tareaSubir.then(snapshot => {
-            const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                db.collection("promocion").add({
-                    tipo: tipo,
-                    imagen: downloadURL,
-                    claveImagen: claveImagen
+    if (validarImagen(imagen))
+        try {
+            const tareaSubir = imagenRef.put(imagen);
+            tareaSubir.then(snapshot => {
+                const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                    db.collection("promocion").add({
+                        tipo: tipo,
+                        imagen: downloadURL,
+                        claveImagen: claveImagen
+                    })
+                    alert("Datos guardados con éxito");
+                }).catch(function (error) {
+                    alert("Error al subir los datos")
                 })
-                alert("Datos guardados con éxito");
-            }).catch(function (error) {
-                alert("Error al subir los datos")
-                console.log("mas adentro")
             })
-        })
-    }
-    catch {
-        alert("Error al subir los datos");
-        console.log("ups")
-    }
+        }
+        catch {
+            alert("Error al subir los datos");
+        }
 }
 
 function mostrarArchivosPromocion(tipo) {
@@ -148,48 +146,49 @@ function modificarArchivosPromocion() {
         imagen = document.getElementById('imagenModificarArreglo').files[0];
     else
         imagen = document.getElementById('imagenModificarEvento').files[0];
-    try {
-        let id;
-        if (tipoPromo == 'arreglo')
-            id = document.getElementById('btnGuardarImagenArreglo').getAttribute('doc-id');
-        else
-            id = document.getElementById('btnGuardarImagenEvento').getAttribute('doc-id');
-        const docData = db.collection('promocion').doc(id);
+    if (validarImagen(imagen))
+        try {
+            let id;
+            if (tipoPromo == 'arreglo')
+                id = document.getElementById('btnGuardarImagenArreglo').getAttribute('doc-id');
+            else
+                id = document.getElementById('btnGuardarImagenEvento').getAttribute('doc-id');
+            const docData = db.collection('promocion').doc(id);
 
-        const query = docData;
-        query.get()
-            .then(function (doc) {
-                const data = doc.data();
-                const imagenRef = almacenamientoRef.child(data.claveImagen);
-                var promocion = {
-                    claveImagen: data.claveImagen, // la clave ya existente
-                    tipo: tipoPromo, // la nueva descripción
-                    imagen: data.imagen + "1" // la url ya existente
-                }
-                docData.set(promocion);
-                if (imagen != null)
-                    imagenRef.put(imagen).then(function () {
+            const query = docData;
+            query.get()
+                .then(function (doc) {
+                    const data = doc.data();
+                    const imagenRef = almacenamientoRef.child(data.claveImagen);
+                    var promocion = {
+                        claveImagen: data.claveImagen, // la clave ya existente
+                        tipo: tipoPromo, // la nueva descripción
+                        imagen: data.imagen + "1" // la url ya existente
+                    }
+                    docData.set(promocion);
+                    if (imagen != null)
+                        imagenRef.put(imagen).then(function () {
+                            alert("Se ha actualizado correctamente");
+                            mostrarArchivosPromocion(tipoPromo);
+                            if (tipoPromo == 'arreglo')
+                                openBox('Arreglos');
+                            else
+                                openBox('Eventos');
+                        });
+                    else {
                         alert("Se ha actualizado correctamente");
                         mostrarArchivosPromocion(tipoPromo);
                         if (tipoPromo == 'arreglo')
                             openBox('Arreglos');
                         else
                             openBox('Eventos');
-                    });
-                else {
-                    alert("Se ha actualizado correctamente");
-                    mostrarArchivosPromocion(tipoPromo);
-                    if (tipoPromo == 'arreglo')
-                        openBox('Arreglos');
-                    else
-                        openBox('Eventos');
+                    }
                 }
-            }
-            ).catch(function (error) {
-                alert(error);
-            });
-    }
-    catch{
-        alert("Se ha presentado un error al actualizar los datos");
-    }
+                ).catch(function (error) {
+                    alert(error);
+                });
+        }
+        catch{
+            alert("Se ha presentado un error al actualizar los datos");
+        }
 }

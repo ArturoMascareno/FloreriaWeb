@@ -6,24 +6,25 @@ function subirArchivosCatalogo() {
     if (descripcion == "" || imagen == null)
         alert("Complete todos los campos")
     else
-        try {
-            const tareaSubir = imagenRef.put(imagen);
-            tareaSubir.then(snapshot => {
-                const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
-                    db.collection("catalogo").add({
-                        descripcion: descripcion,
-                        imagen: downloadURL,
-                        claveImagen: claveImagen
+        if (validarImagen(imagen))
+            try {
+                const tareaSubir = imagenRef.put(imagen);
+                tareaSubir.then(snapshot => {
+                    const url = snapshot.ref.getDownloadURL().then(function (downloadURL) {
+                        db.collection("catalogo").add({
+                            descripcion: descripcion,
+                            imagen: downloadURL,
+                            claveImagen: claveImagen
+                        })
+                        alert("Datos guardados con éxito");
+                    }).catch(function (error) {
+                        alert("Error al subir los datos")
                     })
-                    alert("Datos guardados con éxito");
-                }).catch(function (error) {
-                    alert("Error al subir los datos")
                 })
-            })
-        }
-        catch {
-            alert("Error al subir los datos");
-        }
+            }
+            catch {
+                alert("Error al subir los datos");
+            }
 }
 
 function mostrarArchivosCatalogo() {
@@ -133,35 +134,36 @@ function modificarArchivosCatalago() {
     if (descripcion == "")
         alert("Complete la descripción");
     else
-        try {
+        if (validarImagen(imagen))
+            try {
 
-            query.get()
-                .then(function (doc) {
-                    const data = doc.data();
-                    const imagenRef = almacenamientoRef.child(data.claveImagen);
-                    var catalago = {
-                        claveImagen: data.claveImagen, // la clave ya existente
-                        descripcion: descripcion, // la nueva descripción
-                        imagen: data.imagen + "1" // la url ya existente
-                    }
-                    docData.set(catalago);
-                    if (imagen != null)
-                        imagenRef.put(imagen).then(function () {
+                query.get()
+                    .then(function (doc) {
+                        const data = doc.data();
+                        const imagenRef = almacenamientoRef.child(data.claveImagen);
+                        var catalago = {
+                            claveImagen: data.claveImagen, // la clave ya existente
+                            descripcion: descripcion, // la nueva descripción
+                            imagen: data.imagen + "1" // la url ya existente
+                        }
+                        docData.set(catalago);
+                        if (imagen != null)
+                            imagenRef.put(imagen).then(function () {
+                                alert("Se ha actualizado correctamente");
+                                mostrarArchivosCatalogo();
+                                openBox('Catalogo');
+                            });
+                        else {
                             alert("Se ha actualizado correctamente");
                             mostrarArchivosCatalogo();
                             openBox('Catalogo');
-                        });
-                    else {
-                        alert("Se ha actualizado correctamente");
-                        mostrarArchivosCatalogo();
-                        openBox('Catalogo');
+                        }
                     }
-                }
-                ).catch(function (error) {
-                    alert(error);
-                });
-        }
-        catch{
-            alert("Se ha presentado un error al actualizar los datos");
-        }
+                    ).catch(function (error) {
+                        alert(error);
+                    });
+            }
+            catch{
+                alert("Se ha presentado un error al actualizar los datos");
+            }
 }

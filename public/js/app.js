@@ -30,3 +30,14 @@ function setAttributes(el, attrs) {
         el.setAttribute(key, attrs[key]);
     }
 }
+
+function validarImagen(imagen) {
+    var idxDot = imagen.name.lastIndexOf(".") + 1;
+    var extFile = imagen.name.substr(idxDot, imagen.name.length).toLowerCase();
+    if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
+        return true;
+    } else {
+        alert("Solo se admiten imágenes tipo png, jpg o jpeg");
+        return false;
+    }
+}
