@@ -2,7 +2,13 @@
 document.addEventListener("DOMContentLoaded", event => {
     db = firebase.firestore();
     almacenamientoRef = firebase.storage().ref();
+    noBack();
 })
+
+window.history.forward();
+function noBack() {
+    window.history.forward();
+}
 
 function logear(){
     var logear1 = (function(){

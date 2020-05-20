@@ -4,6 +4,11 @@ var almacenamientoRef; // referencia a almacenamiento de imagenes
 document.addEventListener("DOMContentLoaded", event => {
     db = firebase.firestore();
     almacenamientoRef = firebase.storage().ref();
+    var usuarioNombre = document.getElementById('usuarioNombre');
+
+    db.collection('usuario').doc('usuarioUnico').get().then(function (doc) {
+        usuarioNombre.textContent = doc.data().nombre;
+    });
 })
 
 // generador de nombres aleatorios para las imagenes
@@ -40,4 +45,8 @@ function validarImagen(imagen) {
         alert("Solo se admiten imágenes tipo png, jpg o jpeg");
         return false;
     }
+}
+
+function cerrarSesion() {
+    window.location.replace('../login.html');
 }
