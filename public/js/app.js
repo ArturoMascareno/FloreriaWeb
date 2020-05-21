@@ -39,8 +39,15 @@ function setAttributes(el, attrs) {
 function validarImagen(imagen) {
     var idxDot = imagen.name.lastIndexOf(".") + 1;
     var extFile = imagen.name.substr(idxDot, imagen.name.length).toLowerCase();
+    var tamanoMaximo = 5;
+    
     if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
-        return true;
+        if (imagen.size/1024/1024 <= tamanoMaximo){
+            return true;
+        } else {
+            alert("Esta imagen es demasiado grande, debe ser menor a " + tamanoMaximo + " MB")
+            return false;
+        }
     } else {
         alert("Solo se admiten imágenes tipo png, jpg o jpeg");
         return false;
