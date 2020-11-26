@@ -18,3 +18,6 @@ Después de su instalación se puede ejecutar la página a través del bash, eje
 **firebase serve**
 
 Abrir el link que devuelve al ejecutar el comando
+
+#Pagina
+https://floreria-eleonora.firebaseapp.com/
